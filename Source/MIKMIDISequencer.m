@@ -421,7 +421,7 @@ const MusicTimeStamp MIKMIDISequencerEndOfSequenceLoopEndTimeStamp = -1;
 			[[NSNotificationCenter defaultCenter] postNotificationName:MIKMIDISequencerWillLoopNotification object:self userInfo:nil];
 			[self processSequenceStartingFromMIDITimeStamp:loopStartMIDITimeStamp];
 		}
-	} else if (!self.isRecording) { // Don't stop automatically during recording
+	} else { //if (!self.isRecording || self.stopsRecordingAtEndOfSequence) {
 		MIDITimeStamp systemTimeStamp = MIKMIDIGetCurrentTimeStamp();
 		if ((systemTimeStamp > actualToMIDITimeStamp) && ([clock musicTimeStampForMIDITimeStamp:systemTimeStamp] >= self.sequenceLength)) {
 			[self stopWithDispatchToProcessingQueue:NO];

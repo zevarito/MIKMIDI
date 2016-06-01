@@ -66,7 +66,16 @@
 		[self.trackView setNeedsDisplay:YES];
 		return;
 	} else {
-		if (!self.sequence) self.sequence = [MIKMIDISequence sequence];
+		if (!self.sequence) {
+			self.sequence = [MIKMIDISequence sequence];
+			MIKMIDITrack *firstTrack = [self.sequence addTrackWithError:NULL];
+			firstTrack.events = @[
+								  [MIKMIDINoteEvent noteEventWithTimeStamp:0 note:60 velocity:127 duration:1 channel:0],
+								  [MIKMIDINoteEvent noteEventWithTimeStamp:4 note:61 velocity:127 duration:1 channel:0],
+								  [MIKMIDINoteEvent noteEventWithTimeStamp:8 note:62 velocity:127 duration:1 channel:0],
+								  [MIKMIDINoteEvent noteEventWithTimeStamp:12 note:63 velocity:127 duration:1 channel:0],
+								  ];
+		}
 		NSError *error = nil;
 		MIKMIDITrack *newTrack = [self.sequence addTrackWithError:&error];
 		if (!newTrack) {
@@ -74,6 +83,7 @@
 			return;
 		}
 		self.sequencer.recordEnabledTracks = [NSSet setWithObject:newTrack];
+		self.sequencer.stopsRecordingAtEndOfSequence = YES;
 		[self.sequencer startRecording];
 	}
 }

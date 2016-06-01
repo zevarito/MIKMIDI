@@ -402,6 +402,18 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) MIKSetOf(MIKMIDITrack *) *recordEnabledTracks;
 
 /**
+ *  Whether the sequencer should automatically stop recording when the end of its
+ *  sequence is reached. When this property is NO (the default), recording will
+ *  the length of the sequence will be increased to accomodate recorded notes, if necessary.
+ *  Set this property to YES to make the sequencer automatically stop recording
+ *  when the existing end of the sequence is reached.
+ *
+ *  @note If overriddenSequenceLength is not zero, its value is used as the sequence length,
+ *  rather than the sequence's actual length.
+ */
+@property (nonatomic) BOOL stopsRecordingAtEndOfSequence;
+
+/**
  *  An MIKMIDIClock that is synced with the sequencer's internal clock.
  *
  *  @  @see -[MIKMIDIClock syncedClock]
