@@ -24,10 +24,8 @@ NSString *MIKStringPropertyFromMIDIObject(MIDIObjectRef object, CFStringRef prop
 		return nil;
 	}
 
-	NSCharacterSet *controlCharacters = [NSCharacterSet controlCharacterSet];
-	NSString *string = [(__bridge NSString *)result stringByTrimmingCharactersInSet:controlCharacters];
-	CFRelease(result);
-	return string;
+        NSCharacterSet *controlCharacters = [NSCharacterSet controlCharacterSet];
+	return [CFBridgingRelease(result) stringByTrimmingCharactersInSet:controlCharacters];
 }
 
 BOOL MIKSetStringPropertyOnMIDIObject(MIDIObjectRef object, CFStringRef propertyID, NSString *string, NSError *__autoreleasing*error)
@@ -177,6 +175,26 @@ MIDIPacket MIKMIDIPacketCreate(MIDITimeStamp timeStamp, UInt16 length, MIKArrayO
 	}
 	
 	return result;
+}
+
+MIDIPacket *MIKMIDIPacketCreateFromCommands(MIDITimeStamp timeStamp, MIKArrayOf(MIKMIDICommand *) *commands)
+{
+	NSMutableData *allPacketData = [NSMutableData data];
+	for (MIKMIDICommand *command in commands) {
+		[allPacketData appendData:command.data];
+	}
+
+	MIDIPacket *result = malloc(sizeof(MIDIPacket) + allPacketData.length);
+	result->timeStamp = timeStamp;
+	result->length = allPacketData.length;
+	[allPacketData getBytes:result->data length:allPacketData.length];
+	
+	return result;
+}
+
+void MIKMIDIPacketFree(MIDIPacket *packet)
+{
+	free(packet);
 }
 
 #pragma mark - Note Utilities
