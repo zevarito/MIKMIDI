@@ -4,6 +4,37 @@ All notable changes to MIKMIDI are documented in this file. This project adheres
 ## [Unreleased]
 This section is for recent changes not yet included in an official release.
 
+## [1.7.2] - 2022-06-19
+
+### ADDED
+
+- A brand new version of the MIDI Testbed example app written using SwiftUI. Thanks to @jranson. (#302)
+- `(NS)NotificationCenter` notifications are posted for MIDI Device and Entity changes (#319)
+- `MIKMIDIEntityWasChangedNotification`'s user info now has the changed object as the value for the `MIKMIDIEntityKey` (#319, #321)
+
+### FIXED
+
+- 14-bit messages are correctly split into separate MSB and LSB messages when sending via a virtual endpoint (#329)
+- MIDI to Audio example no longer fails due to changed MIKMIDI APIs. Thanks to @jupdike. (#316)
+
+## [1.7.1] - 2020-08-13
+
+### ADDED
+
+- Support for recording control change (CC) events in MIKMIDISequencer (#262)
+- MIKMIDI can now be built as a xcframework with support for iOS (device and simulator), macOS, and Mac Catalyst. Run the `build_xcframework.sh` script in `Framework/` or build the MIKMIDI.xcframework target in Xcode.
+
+### FIXED
+
+- Bug where `-[MIKMIDIInputPort sourceEndpointForConnectionToken:]` always returned nil, causing duplicate event handler calls upon re-establishing a previous connection (#263)
+- Failure to copy `lastSyncedMusicTimeStamp` to historical clock in `MIKMIDIClock` (#268)
+- Race condition in `MIKMIDISynthesizer`
+- Greatly improved performance of `-[MIKMIDITrack eventsOfClass:fromTimeStamp:toTimeStamp:]` (and dependent methods) (#275)
+- Incorrect behavior of `-[MIKMIDITrack eventsOfClass:fromTimeStamp:toTimeStamp:]` when passed a `Nil` `eventClass`
+- Build warning in Xcode 12 beta
+
+Thanks to all who contributed bug reports and pull requests to this release!
+
 ## [1.7.0] - 2018-11-03
 
 ### ADDED
